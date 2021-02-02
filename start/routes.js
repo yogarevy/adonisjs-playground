@@ -25,3 +25,11 @@ Route.group(() => {
   Route.post('auth/register', 'AuthController.register').as('register').validator('RegisterValidation')
   Route.post('auth/login', 'AuthController.login').as('login').validator('LoginValidation')
 }).prefix('api/v1').namespace('Api')
+
+//Users
+Route.group(() => {
+  Route.get('users', 'Api/UserController.index').as('users.index')
+  Route.get('users/show/:id', 'Api/UserController.show').as('users.show')
+  Route.post('users/update/:id', 'Api/UserController.update').as('users.update')
+  Route.delete('users/delete/:id', 'Api/UserController.destroy').as('users.destroy')
+}).prefix('api/v1').middleware(['auth'])

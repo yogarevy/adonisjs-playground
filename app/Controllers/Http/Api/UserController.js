@@ -38,13 +38,13 @@ class UserController {
       let paged = await User.query().whereRaw(conditions).orderBy(sort, order).paginate(page, limit)
 
       return response.status(200).send({
+        status: 200,
         meta: {
           api_version: '1.0.1',
           object: "Index User",
           method: request.method(),
           url: request.hostname() + request.originalUrl(),
         },
-        status: 200,
         paged
       })
     } catch (e) {
@@ -85,6 +85,33 @@ class UserController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+    try {
+      let item = await User.findOrFail(params.id)
+
+      return response.status(200).send({
+        status: 200,
+        meta: {
+          api_version: '1.0.1',
+          object: "Show User",
+          method: request.method(),
+          url: request.hostname() + request.originalUrl(),
+        },
+        data: item
+      })
+    } catch (e) {
+      let errException = {
+        status: e.status,
+        meta: {
+          api_version: '1.0.1',
+          object: "Show User",
+          method: request.method(),
+          url: request.hostname() + request.originalUrl(),
+        },
+        error: e.name,
+        message: e.message
+      }
+      return response.status(e.status).send(errException)
+    }
   }
 
   /**

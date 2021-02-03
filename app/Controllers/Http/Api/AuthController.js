@@ -38,13 +38,13 @@ class AuthController {
 
       let accessToken = await auth.generate(user)
       return response.status(200).send({
+        status: 200,
         meta: {
           api_version: '1.0.1',
           object: "register",
           method: request.method(),
           url: request.hostname() + request.originalUrl(),
         },
-        status: 200,
         message: "Success registered new user",
       })
     } catch (error) {
@@ -78,13 +78,13 @@ class AuthController {
           .attempt(data.email, data.password)
 
         return response.status(200).send({
+          status: 200,
           meta: {
             api_version: '1.0.1',
             object: "login",
             method: request.method(),
             url: request.hostname() + request.originalUrl(),
           },
-          status: 200,
           message: "Succesfully Login",
           access_token: accessToken,
           user: user
@@ -92,13 +92,13 @@ class AuthController {
       }
     } catch (error) {
       let errException = {
+        status: error.status,
         meta: {
           api_version: '1.0.1',
           object: "login",
           method: request.method(),
           url: request.hostname() + request.originalUrl(),
         },
-        status: error.status,
         error: error.name,
         message: error.message
       }

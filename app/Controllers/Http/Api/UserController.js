@@ -2,6 +2,8 @@
 
 const User = use('App/Models/User')
 const ExceptionHandler = use('App/Exceptions/Handler')
+const Helpers = use('Helpers')
+const Env = use('Env')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -134,7 +136,71 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, auth, request, response }) {
+    try {
+      //getting data passed within the request
+      const data = request.only(["name", "email", "password", "phone", "status"])
+      let item = await User.findOrFail(params.id)
+
+      let imageId = null
+      if (request.file('image')) {
+        const imgValidation = {
+          types: ['image'],
+          size: '2mb',
+          extnames: ['jpg', 'jpeg', 'png']
+        }
+        imageId = request.file('image', imgValidation)
+
+        await imageId.move(Helpers.publicPath('uploads/images'), {
+          name: params.id + '.' + request.file('image').extname,
+          overwrite: true,
+        })
+        item.image = Env.get('APP_URL') + '/uploads/images/' + params.id + '.jpg'
+
+        if (!imageId.moved()) {
+          return response.status(422).send({
+            meta: {
+              api_version: '1.0.1'
+            },
+            status: 422,
+            errors: imageId.error().message
+          })
+        }
+      }
+
+
+      const user = await auth.getUser();
+      item.name = data.name
+      item.email = data.email
+      data.password ? item.password = data.password : ''
+      item.status = data.status ? parseInt(data.status) : parseInt(item.status)
+      item.last_modified_by = user.id
+      await item.save()
+
+      return response.status(200).send({
+        status: 200,
+        meta: {
+          api_version: '1.0.1',
+          object: "Update User",
+          method: request.method(),
+          url: request.hostname() + request.originalUrl(),
+        },
+        data: item
+      })
+    } catch (e) {
+      let errException = {
+        status: e.status,
+        meta: {
+          api_version: '1.0.1',
+          object: "Update User",
+          method: request.method(),
+          url: request.hostname() + request.originalUrl(),
+        },
+        error: e.name,
+        message: e.message
+      }
+      return response.status(e.status).send(errException)
+    }
   }
 
   /**

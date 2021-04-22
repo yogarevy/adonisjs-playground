@@ -7,14 +7,14 @@ npm i -g @adonisjs/cli
 
 ## Setup
 
-create file `.env` dan copy isi `.env.example` ke `.env` atau run command
-
+create file `.env` pada root project dan copy isi `.env.example` ke `.env` atau run command terminal di root project
 ```bash
 cp .env.example .env
 ```
+
 kemudian setting pengaturan database disesuaikan dengan database masing-masing
 
-kemudian run `npm install`.
+kemudian run command terminal `npm install` dalam root project.
 
 
 ### Migrations

@@ -11,8 +11,8 @@ create file `.env` pada root project dan copy isi `.env.example` ke `.env` atau 
 ```bash
 cp .env.example .env
 ```
-
-kemudian setting pengaturan database disesuaikan dengan database masing-masing
+Buat database di MySQL
+kemudian setting pengaturan database di `.env` disesuaikan dengan database masing-masing
 
 kemudian run command terminal `npm install` dalam root project.
 

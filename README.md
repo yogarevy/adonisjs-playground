@@ -7,12 +7,12 @@ npm i -g @adonisjs/cli
 
 ## Setup
 
-create file .env dan copy .env.example ke .env atau run command
+create file `.env` dan copy isi `.env.example` ke `.env` atau run command
 
 ```bash
 cp .env.example .env
 ```
-kemudian setting pengaturan database
+kemudian setting pengaturan database disesuaikan dengan database masing-masing
 
 kemudian run `npm install`.
 

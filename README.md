@@ -1,25 +1,20 @@
 # Adonis fullstack application
 
-This is the fullstack boilerplate for AdonisJs, it comes pre-configured with.
-
-1. Bodyparser
-2. Session
-3. Authentication
-4. Web security middleware
-5. CORS
-6. Edge template engine
-7. Lucid ORM
-8. Migrations and seeds
+jika belum install adonis run command
+```bash
+npm i -g @adonisjs/cli
+```
 
 ## Setup
 
-Use the adonis command to install the blueprint
+create file .env dan copy .env.example ke .env atau run command
 
 ```bash
-adonis new yardstick
+cp .env.example .env
 ```
+kemudian setting pengaturan database
 
-or manually clone the repo and then run `npm install`.
+kemudian run `npm install`.
 
 
 ### Migrations

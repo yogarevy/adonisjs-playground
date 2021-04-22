@@ -4,6 +4,7 @@ const Shopping = use('App/Models/Shopping')
 const ExceptionHandler = use('App/Exceptions/Handler')
 const Helpers = use('Helpers')
 const Env = use('Env')
+const { v4: uuidv4 } = require('uuid');
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -73,6 +74,45 @@ class ShoppingController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    try {
+      //getting data passed within the request
+      const data = request.only([
+        "name",
+      ])
+
+      let dataShopping = {
+        id: uuidv4(),
+        name: data.name,
+      };
+
+      const shoppings = await Shopping.create(dataShopping)
+
+      return response.status(200).send({
+        status: 200,
+        meta: {
+          api_version: '1.0.1',
+          object: "Create Shopping",
+          method: request.method(),
+          url: request.hostname() + request.originalUrl(),
+        },
+        data: [{
+          item: shoppings
+        }]
+      })
+    } catch (error) {
+      let errException = {
+        status: error.status,
+        meta: {
+          api_version: '1.0.1',
+          object: "Create Shopping",
+          method: request.method(),
+          url: request.hostname() + request.originalUrl(),
+        },
+        error: error.name,
+        message: error.message
+      }
+      return response.status(error.status).send(errException)
+    }
   }
 
   /**
@@ -96,7 +136,9 @@ class ShoppingController {
           method: request.method(),
           url: request.hostname() + request.originalUrl(),
         },
-        data: item
+        data: [{
+          item: item
+        }]
       })
     } catch (e) {
       let errException = {
@@ -135,6 +177,45 @@ class ShoppingController {
    * @param {Response} ctx.response
    */
   async update ({ params, auth, request, response }) {
+    try {
+      //getting data passed within the request
+      const user = await auth.getUser()
+      const data = request.only([
+        "name",
+      ])
+
+      let item = await Shopping.findOrFail(params.id)
+
+      item.name = data.name
+      item.last_modified_by = user.id
+      await item.save()
+
+      return response.status(200).send({
+        status: 200,
+        meta: {
+          api_version: '1.0.1',
+          object: "Update Shopping",
+          method: request.method(),
+          url: request.hostname() + request.originalUrl(),
+        },
+        data: [{
+          item: item
+        }]
+      })
+    } catch (error) {
+      let errException = {
+        status: error.status,
+        meta: {
+          api_version: '1.0.1',
+          object: "Update Shopping",
+          method: request.method(),
+          url: request.hostname() + request.originalUrl(),
+        },
+        error: error.name,
+        message: error.message
+      }
+      return response.status(error.status).send(errException)
+    }
   }
 
   /**
@@ -146,7 +227,36 @@ class ShoppingController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+    try {
+      let item = await Shopping.findOrFail(params.id)
+
+      await item.delete()
+
+      return response.status(200).send({
+        status: 200,
+        meta: {
+          api_version: '1.0.1',
+          object: "Delete Shopping",
+          method: request.method(),
+          url: request.hostname() + request.originalUrl(),
+        },
+        message: "Success deleted shopping",
+      })
+    } catch (error) {
+      let errException = {
+        status: error.status,
+        meta: {
+          api_version: '1.0.1',
+          object: "Delete Shopping",
+          method: request.method(),
+          url: request.hostname() + request.originalUrl(),
+        },
+        error: error.name,
+        message: error.message
+      }
+      return response.status(error.status).send(errException)
+    }
   }
 }
 
-module.exports = UserController
+module.exports = ShoppingController

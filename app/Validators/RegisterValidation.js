@@ -4,9 +4,10 @@ class RegisterValidation {
   get rules () {
     return {
       // validation rules
-      name: 'required|max:150|min:2',
+      username: 'required|max:150|min:2|unique:users',
       email: 'required|email|unique:users',
-      password: 'required|min:8'
+      password: 'required|min:8',
+      name: 'required|max:150|min:2',
     }
   }
 
@@ -16,6 +17,8 @@ class RegisterValidation {
       'email.required': 'You must provide a email address.',
       'email.email': 'You must provide a valid email address.',
       'email.unique': 'This email is already registered.',
+      'username.required': 'You must provide a username.',
+      'username.unique': 'This username is already registered.',
       'password.required': 'You must provide a password',
       'password.min': 'Password must be 8 characters or more.'
     }

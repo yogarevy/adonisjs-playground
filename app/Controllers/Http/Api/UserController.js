@@ -22,7 +22,7 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index({ request, response, view }) {
     try {
       let search_term = request.input('search')
       let page = (request.input('page') != null) ? request.input('page') : 1
@@ -63,7 +63,7 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
+  async create({ request, response, view }) {
   }
 
   /**
@@ -74,7 +74,7 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store({ request, response }) {
   }
 
   /**
@@ -86,7 +86,7 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show({ params, request, response, view }) {
     try {
       let item = await User.findOrFail(params.id)
 
@@ -98,7 +98,9 @@ class UserController {
           method: request.method(),
           url: request.hostname() + request.originalUrl(),
         },
-        data: item
+        data: [{
+          item: item
+        }]
       })
     } catch (e) {
       let errException = {
@@ -125,7 +127,7 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async edit ({ params, request, response, view }) {
+  async edit({ params, request, response, view }) {
   }
 
   /**
@@ -136,7 +138,7 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, auth, request, response }) {
+  async update({ params, auth, request, response }) {
     try {
       //getting data passed within the request
       const data = request.only(["name", "email", "password", "phone", "status"])
@@ -211,7 +213,7 @@ class UserController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy({ params, request, response }) {
   }
 }
 

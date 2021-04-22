@@ -1,7 +1,7 @@
 'use strict'
 
 const User = use('App/Models/User')
-const Uuid = require('uuid/v4')
+const { v4: uuidv4 } = require('uuid');
 const ExceptionHandler = use('App/Exceptions/Handler')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -36,7 +36,7 @@ class AuthController {
       ])
 
       let dataUser = {
-        id: Uuid(),
+        id: uuidv4(),
         name: data.name,
         email: data.email,
         password: data.password,

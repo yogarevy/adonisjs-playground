@@ -23,15 +23,29 @@ class AuthController {
   async register({ request, auth, response }) {
     try {
       //getting data passed within the request
-      const data = request.only(["name", "email", "password"])
+      const data = request.only([
+        "name",
+        "email",
+        "password",
+        "username",
+        "phone",
+        "address",
+        "country",
+        "city",
+        "postcode",
+      ])
 
       let dataUser = {
         id: Uuid(),
         name: data.name,
         email: data.email,
         password: data.password,
-        status: 1,
-        is_main: 1,
+        username: data.username,
+        phone: data.username,
+        address: data.address,
+        country: data.country,
+        city: data.city,
+        postcode: data.postcode,
       };
 
       const user = await User.create(dataUser)
@@ -46,6 +60,8 @@ class AuthController {
           url: request.hostname() + request.originalUrl(),
         },
         message: "Success registered new user",
+        email: data.email,
+        access_token: accessToken,
       })
     } catch (error) {
       throw new ExceptionHandler()
